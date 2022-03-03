@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
-let firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyB4C_s5BgR8C41mM9bUKG3bmrjHVUXzBz4",
     authDomain: "boardapp-abf68.firebaseapp.com",
     projectId: "boardapp-abf68",
@@ -12,8 +12,8 @@ let firebaseConfig = {
   };
   
   // Initialize Firebase
-  if(firebase.app.length){
- firebase.initializeApp(firebaseConfig);
+  if(!firebase.apps.length){
+  firebase.initializeApp(firebaseConfig);
   }
  
 
