@@ -3,8 +3,45 @@ import { getSession } from "next-auth/client";
 import firebase from "../../services/firebaseConnection";
 import { format } from "date-fns";
 
-export default function Task({ data }) {
-  return <div>teste</div>;
+import styles from './task.module.scss';
+import Head from "next/head";
+import {FiCalendar} from 'react-icons/fi';
+
+
+
+type task ={
+    id: string;
+    created: string | Date;
+    createdFormated?: string;
+    tarefa: string;
+    userId: string;
+    nome: string;
+}
+
+interface TaskListProps {
+  data: string;
+}
+
+export default function Task({ data }: TaskListProps) {
+    const task = JSON.parse(data) as task;
+  return (
+      <>
+      <Head>
+          <title>Detalhes de sua tarefa</title>
+      </Head>
+      <article className={styles.container}>
+          <div className={styles.actions}>
+              <div>
+                <FiCalendar size={30} color='#FFF'/>
+                <span>Tarefa criada</span>
+                <time>{task.createdFormated}</time>
+              </div>
+          </div>
+          <p>{task.tarefa}</p>
+      </article>
+      
+      </>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async ({
@@ -44,6 +81,9 @@ export const getServerSideProps: GetServerSideProps = async ({
     });
 
   return {
-    props: {},
+    props: {
+        
+        data
+    },
   };
 };
