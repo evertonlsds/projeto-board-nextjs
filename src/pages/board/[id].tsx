@@ -78,7 +78,17 @@ export const getServerSideProps: GetServerSideProps = async ({
         nome: snapshot.data().nome,
       };
       return JSON.stringify(data);
-    });
+    })
+    .catch(()=>{
+      return{};
+    })
+    if(Object.keys(data).length === 0)
+    return {
+      redirect: {
+        destination: "/borad",
+        permanent: false,
+      },
+    };
 
   return {
     props: {
