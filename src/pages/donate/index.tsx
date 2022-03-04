@@ -5,7 +5,9 @@ import { GetServerSideProps } from "next";
 import { useState } from "react";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import firebase from "../../services/firebaseConnection";
-//Af-G4h08xmZZe7a5DIBGU3zrXmPFty2I7cTfkPvu6TsRKN-artv6aPgcIkyNlKTRVHKk1CRpk-JCxZuy
+import Image from  'next/image'
+import rocketImg from '../../../public/images/rocket.svg';
+
 //<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
 
 interface DonateProps {
@@ -40,7 +42,7 @@ export default function Donate({ user }: DonateProps) {
         <title>Ajude a plataforma Board ficar online!</title>
       </Head>
       <main className={styles.container}>
-        <img src="/images/rocket.svg" alt="seja apoiador" />
+        <Image src={rocketImg} alt="seja apoiador" />
 
         {vip && (
           <div className={styles.vip}>

@@ -3,6 +3,8 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import styles from "../../styles/styles.module.scss";
 import firebase from "../services/firebaseConnection";
+import Image from 'next/image';
+import boardUser from '../../public/images/board-user.svg'
 
 type Data = {
   id: string;
@@ -24,7 +26,7 @@ export default function Home({ data }: HomeProps) {
         <title>Board - Organizando suas tarefas</title>
       </Head>
       <main className={styles.contentContainer}>
-        <img src="/images/board-user.svg" alt="ferramentas board" />
+        <Image src={boardUser} alt="ferramentas board" />
 
         <section className={styles.callToAction}>
           <h1>
