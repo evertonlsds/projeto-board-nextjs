@@ -2,6 +2,11 @@ import styles from "./styles.module.scss";
 import Head from "next/head";
 import { getSession } from "next-auth/client";
 import { GetServerSideProps } from "next";
+import { useState } from "react";
+import { PayPalButtons } from "@paypal/react-paypal-js";
+import firebase from "../../services/firebaseConnection";
+//Af-G4h08xmZZe7a5DIBGU3zrXmPFty2I7cTfkPvu6TsRKN-artv6aPgcIkyNlKTRVHKk1CRpk-JCxZuy
+//<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
 
 interface DonateProps {
   user: {
@@ -12,6 +17,23 @@ interface DonateProps {
 }
 
 export default function Donate({ user }: DonateProps) {
+  const [vip, setVip] = useState(false);
+
+  async function handleSaveDonate() {
+    await firebase
+      .firestore()
+      .collection("users")
+      .doc(user.id)
+      .set({
+        donate: true,
+        lastDonate: new Date(),
+        image: user.image,
+      })
+      .then(() => {
+        setVip(true);
+      });
+  }
+
   return (
     <>
       <Head>
@@ -20,10 +42,12 @@ export default function Donate({ user }: DonateProps) {
       <main className={styles.container}>
         <img src="/images/rocket.svg" alt="seja apoiador" />
 
-        <div className={styles.vip}>
-          <img src={user.image} alt="foto de perfil de usuário" />
-          <span>Parabéns você é um novo apoiador!</span>
-        </div>
+        {vip && (
+          <div className={styles.vip}>
+            <img src={user.image} alt="foto de perfil de usuário" />
+            <span>Parabéns você é um novo apoiador!</span>
+          </div>
+        )}
 
         <h1>Seja um apoiador deste projeto 🏆</h1>
         <h3>
@@ -33,6 +57,26 @@ export default function Donate({ user }: DonateProps) {
           {" "}
           Apareça na nossa home, tenha funcionalidades exlusivas.
         </strong>
+
+        <PayPalButtons
+          createOrder={(data, actions) => {
+            return actions.order.create({
+              purchase_units: [
+                {
+                  amount: {
+                    value: "1",
+                  },
+                },
+              ],
+            });
+          }}
+          onApprove={(data, actions) => {
+            return actions.order.capture().then(function (details) {
+              console.log("compra aprovada" + details.payer.name.given_name);
+              handleSaveDonate();
+            });
+          }}
+        />
       </main>
     </>
   );
